@@ -59,17 +59,17 @@ func ProjectProfileHandler(w http.ResponseWriter, r *http.Request) {
 
 	go func() {
 		defer wg.Done()
-		profile.Risk = fetchFromML("http://localhost:8000/risk/" + workID)
+		profile.Risk = fetchFromML("https://griffingreek-ml-api.onrender.com" + workID)
 	}()
 
 	go func() {
 		defer wg.Done()
-		profile.Evidence = fetchFromML("http://localhost:8000/evidence/" + workID)
+		profile.Evidence = fetchFromML("https://griffingreek-ml-api.onrender.com" + workID)
 	}()
 
 	go func() {
 		defer wg.Done()
-		profile.Network = fetchFromML("http://localhost:8000/network/" + workID)
+		profile.Network = fetchFromML("https://griffingreek-ml-api.onrender.com" + workID)
 	}()
 
 	wg.Wait()
@@ -153,7 +153,7 @@ func main() {
 func PulseScoreHandler(w http.ResponseWriter, r *http.Request) {
 	mpID := chi.URLParam(r, "mp_id")
 
-	mlURL := fmt.Sprintf("http://localhost:8000/api/v1/pulse-score/%s", mpID)
+	mlURL := fmt.Sprintf("https://griffingreek-ml-api.onrender.com/api/v1/pulse-score/%s", mpID)
 
 	resp, err := http.Get(mlURL)
 	if err != nil {
@@ -188,7 +188,7 @@ func PulseScoreHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func GenerateReportHandler(w http.ResponseWriter, r *http.Request) {
-	mlURL := "http://localhost:8000/api/v1/reports/generate"
+	mlURL := "https://griffingreek-ml-api.onrender.com/api/v1/reports/generate"
 	resp, err := http.Post(mlURL, "application/json", r.Body)
 	if err != nil {
 		http.Error(w, `{"error": "ML Service unreachable"}`, http.StatusBadGateway)
@@ -203,7 +203,7 @@ func GenerateReportHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func ListSubscriptionsHandler(w http.ResponseWriter, r *http.Request) {
-	mlURL := "http://localhost:8000/api/v1/reports/subscriptions"
+	mlURL := "https://griffingreek-ml-api.onrender.com/api/v1/reports/subscriptions"
 	resp, err := http.Get(mlURL)
 	if err != nil {
 		http.Error(w, `{"error": "ML Service unreachable"}`, http.StatusBadGateway)
@@ -218,7 +218,7 @@ func ListSubscriptionsHandler(w http.ResponseWriter, r *http.Request) {
 
 func TriggerSubscriptionHandler(w http.ResponseWriter, r *http.Request) {
 	subID := chi.URLParam(r, "subscription_id")
-	mlURL := fmt.Sprintf("http://localhost:8000/api/v1/reports/subscriptions/%s/trigger", subID)
+	mlURL := fmt.Sprintf("https://griffingreek-ml-api.onrender.com/api/v1/reports/subscriptions/%s/trigger", subID)
 
 	resp, err := http.Post(mlURL, "application/json", nil)
 	if err != nil {
@@ -232,7 +232,7 @@ func TriggerSubscriptionHandler(w http.ResponseWriter, r *http.Request) {
 	io.Copy(w, resp.Body)
 }
 func EvaluateAlertHandler(w http.ResponseWriter, r *http.Request) {
-	mlURL := "http://localhost:8000/api/v1/alerts/evaluate"
+	mlURL := "https://griffingreek-ml-api.onrender.com/api/v1/alerts/evaluate"
 	resp, err := http.Post(mlURL, "application/json", r.Body)
 	if err != nil {
 		http.Error(w, `{"error": "ML Service unreachable"}`, http.StatusBadGateway)
@@ -247,7 +247,7 @@ func EvaluateAlertHandler(w http.ResponseWriter, r *http.Request) {
 
 func GetAuditTrailHandler(w http.ResponseWriter, r *http.Request) {
 
-	mlURL := "http://localhost:8000/api/v1/alerts/audit-trail"
+	mlURL := "https://griffingreek-ml-api.onrender.com/api/v1/alerts/audit-trail"
 	if r.URL.RawQuery != "" {
 		mlURL += "?" + r.URL.RawQuery
 	}
@@ -265,7 +265,7 @@ func GetAuditTrailHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetInspectorsHandler(w http.ResponseWriter, r *http.Request) {
-	mlURL := "http://localhost:8000/api/v1/inspectors"
+	mlURL := "https://griffingreek-ml-api.onrender.com/api/v1/inspectors"
 	resp, err := http.Get(mlURL)
 	if err != nil {
 		http.Error(w, `{"error": "ML Service unreachable"}`, http.StatusBadGateway)
@@ -280,7 +280,7 @@ func GetInspectorsHandler(w http.ResponseWriter, r *http.Request) {
 
 func SuggestInspectorsHandler(w http.ResponseWriter, r *http.Request) {
 	projectID := chi.URLParam(r, "project_id")
-	mlURL := fmt.Sprintf("http://localhost:8000/api/v1/inspectors/suggest/%s", projectID)
+	mlURL := fmt.Sprintf("https://griffingreek-ml-api.onrender.com/api/v1/inspectors/suggest/%s", projectID)
 
 	resp, err := http.Get(mlURL)
 	if err != nil {
@@ -295,7 +295,7 @@ func SuggestInspectorsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func DispatchInspectorHandler(w http.ResponseWriter, r *http.Request) {
-	mlURL := "http://localhost:8000/api/v1/inspectors/dispatch"
+	mlURL := "https://griffingreek-ml-api.onrender.com/api/v1/inspectors/dispatch"
 	resp, err := http.Post(mlURL, "application/json", r.Body)
 	if err != nil {
 		http.Error(w, `{"error": "ML Service unreachable"}`, http.StatusBadGateway)
